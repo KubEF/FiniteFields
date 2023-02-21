@@ -1,10 +1,11 @@
-﻿namespace FiniteFields
+﻿
+namespace FiniteFields
 {
     public static class Program
     {
+        
         public static void Main(string[] args)
         {
-            
         }
     }
 }
