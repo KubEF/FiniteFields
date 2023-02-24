@@ -33,10 +33,10 @@ namespace FiniteFields
         public int deg { get; }
         public PolinomOverSimpleField(int[] listOfCoeff, int dimension) 
         {
-            this.deg = listOfCoeff.Length - 1;
-            this.dim = dimension;
+            deg = listOfCoeff.Length - 1;
+            dim = dimension;
             this.listOfCoeff = listOfCoeff;
-            this.ToSimpleField();
+            ToSimpleField();
             
         }
         private void ToSimpleField()
@@ -45,6 +45,21 @@ namespace FiniteFields
             {
                 listOfCoeff[i] = MyMath.MathDivRemains(listOfCoeff[i], dim);
             }
+        }
+        private PolinomOverSimpleField CutExtraZeros() 
+        {
+            PolinomOverSimpleField tempPol = this;
+            int realDeg = this.deg;
+            while (tempPol[realDeg] == 0 & realDeg > 0)
+            {
+                realDeg--;
+            }
+            int[] listOfCoeff = new int[realDeg + 1];
+            for (int i = 0; i <= realDeg; i++)
+            {
+                listOfCoeff[i] = tempPol[i];
+            }
+            return new PolinomOverSimpleField(listOfCoeff, this.dim);
         }
         public  int this[int key]
         {
@@ -69,12 +84,12 @@ namespace FiniteFields
             int[] listOfResCoeff = new int[pol.deg + 1];
             for (int i = 0; i <= pol.deg; i++)
             {
-                listOfResCoeff[i] = -pol[i];
+                listOfResCoeff[i] = MyMath.MathDivRemains(-pol[i], pol.dim);
             }
             return new PolinomOverSimpleField(listOfResCoeff, pol.dim);
 
         }
-        public static PolinomOverSimpleField operator +(PolinomOverSimpleField pol) => pol; 
+        public static PolinomOverSimpleField operator +(PolinomOverSimpleField pol) => pol;
         public static PolinomOverSimpleField operator +(PolinomOverSimpleField pol1, PolinomOverSimpleField pol2)
         {
             if (pol1.dim == pol2.dim)
@@ -85,7 +100,7 @@ namespace FiniteFields
                 {
                     listOfResCoeff[i] = pol1[i] + pol2[i];
                 }
-                return new PolinomOverSimpleField(listOfResCoeff, pol1.dim);
+                return (new PolinomOverSimpleField(listOfResCoeff, pol1.dim)).CutExtraZeros();
             }
             else
             {
@@ -94,18 +109,7 @@ namespace FiniteFields
         }
         public static PolinomOverSimpleField operator -(PolinomOverSimpleField pol1, PolinomOverSimpleField pol2) 
         { 
-            PolinomOverSimpleField tempPol =  pol1 + (-pol2);
-            int realDeg = tempPol.deg;
-            while (tempPol[realDeg] == 0 & realDeg > 0)
-            {
-                realDeg--;
-            }
-            int[] listOfCoeff = new int[realDeg + 1];
-            for(int i = 0; i <= realDeg; i++)
-            {
-                listOfCoeff[i] = tempPol[i];
-            }
-            return new PolinomOverSimpleField(listOfCoeff, pol1.dim);
+            return pol1 + (-pol2);
         }
         public static PolinomOverSimpleField operator *(PolinomOverSimpleField pol1, PolinomOverSimpleField pol2)
         {
@@ -178,6 +182,7 @@ namespace FiniteFields
         {
             return base.GetHashCode();
         }
+        
     }
     
 }

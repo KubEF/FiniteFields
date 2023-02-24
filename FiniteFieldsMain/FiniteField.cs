@@ -64,6 +64,17 @@ namespace FiniteFields
             }
 
         }
+        public FiniteFieldElement(FiniteField F, int[] representedPol)
+        {
+            this.F = F;
+            if(representedPol.Length < F.n )
+                RepresentedPol = new PolinomOverSimpleField(representedPol, F.p);
+            else
+            {
+                throw new Exception("Передан некорректный представляющий многочлен");
+            }
+
+        }
         public static FiniteFieldElement operator +(FiniteFieldElement a) => a;
         public static FiniteFieldElement operator -(FiniteFieldElement a) => new FiniteFieldElement(a.F, -a.RepresentedPol);
         
@@ -82,20 +93,20 @@ namespace FiniteFields
             return new FiniteFieldElement(a.F, resultRepresentedPol);
         }
         public static FiniteFieldElement operator /(FiniteFieldElement a, FiniteFieldElement b) => a * b.GetReverse();
-        public FiniteFieldElement Pow (int y)
+        public FiniteFieldElement Pow (int degree)
         {
-            y = Math.Sign(y) * ((Math. Abs(y) + 1) % (int)Math.Pow(F.p, F.n));
-            if (y == 1) return this;
-            else if(y == 0) return new FiniteFieldElement(F, new PolinomOverSimpleField(new int[1] {1}, F.p));
+            degree = Math.Sign(degree) * ((Math. Abs(degree) + 1) % (int)Math.Pow(F.p, F.n));
+            if (degree == 1) return this;
+            else if(degree == 0) return new FiniteFieldElement(F, new int[] {1});
             else
             {
-                if (y > 1)
+                if (degree > 1)
                 {
-                    return Pow(y / 2);
+                    return Pow(degree / 2);
                 }
                 else 
                 {
-                    return Pow(Math.Abs(y)).GetReverse();
+                    return Pow(Math.Abs(degree)).GetReverse();
                 }
             }
         }
