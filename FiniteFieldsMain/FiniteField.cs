@@ -67,7 +67,7 @@ namespace FiniteFields
         public FiniteFieldElement(FiniteField F, int[] representedPol)
         {
             this.F = F;
-            if(representedPol.Length < F.n )
+            if(representedPol.Length <= F.n )
                 RepresentedPol = new PolinomOverSimpleField(representedPol, F.p);
             else
             {
@@ -88,21 +88,30 @@ namespace FiniteFields
 
         public static FiniteFieldElement operator *(FiniteFieldElement a, FiniteFieldElement b)
         {
-            if (!a.F.Equals(b.F)) throw new Exception("Попытка сложить числа из разных полей");
+            if (!a.F.Equals(b.F)) throw new Exception("Попытка умножить числа из разных полей");
             PolinomOverSimpleField resultRepresentedPol = (a.RepresentedPol * b.RepresentedPol) % a.F.q;
             return new FiniteFieldElement(a.F, resultRepresentedPol);
         }
         public static FiniteFieldElement operator /(FiniteFieldElement a, FiniteFieldElement b) => a * b.GetReverse();
         public FiniteFieldElement Pow (int degree)
         {
-            degree = Math.Sign(degree) * ((Math. Abs(degree) + 1) % (int)Math.Pow(F.p, F.n));
+            
             if (degree == 1) return this;
-            else if(degree == 0) return new FiniteFieldElement(F, new int[] {1});
+            else if(degree == 0) return this.F.GetOne();
             else
             {
+                degree = Math.Sign(degree) * (Math.Abs(degree) % (int)(Math.Pow(F.p, F.n) - 1));
                 if (degree > 1)
                 {
-                    return Pow(degree / 2);
+                    if (degree % 2 == 0)
+                    {
+                        var temp = Pow(degree / 2);
+                        return temp * temp;
+                    }
+                    else
+                    {
+                        return this * Pow(degree - 1);
+                    }
                 }
                 else 
                 {
