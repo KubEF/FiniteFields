@@ -65,7 +65,7 @@ public class PolinomOverSimpleFieldTests
         Assert.That(actual, Is.EqualTo(expect));
     }
     [Test]
-    public void SubstractionTest1()
+    public void SubtractionTest1()
     {
         PolinomOverSimpleField expect =   new(new int[] { 3, 0, 3, 2, 2 }, 5);
         PolinomOverSimpleField polinom1 = new(new int[] { 4, 1, 2, 0, 1 }, 5);
@@ -76,7 +76,7 @@ public class PolinomOverSimpleFieldTests
         Assert.That(actual, Is.EqualTo(expect));
     }
     [Test]
-    public void SubstractionTest2()
+    public void SubtractionTest2()
     {
         PolinomOverSimpleField expect =   new(new int[] { 3, 0, 3, 2, 1 }, 5);
         PolinomOverSimpleField polinom1 = new(new int[] { 4, 1, 2, 0 }, 5);
@@ -87,7 +87,7 @@ public class PolinomOverSimpleFieldTests
         Assert.That(actual, Is.EqualTo(expect));
     }
     [Test]
-    public void SubstractionTest3()
+    public void SubtractionTest3()
     {
         PolinomOverSimpleField expect =   new(new int[] { 3, 0, 3, 2 }, 5);
         PolinomOverSimpleField polinom1 = new(new int[] { 4, 1, 2, 0, 4 }, 5);

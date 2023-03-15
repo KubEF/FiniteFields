@@ -20,9 +20,22 @@ namespace FiniteFields
                 return ((Math.Abs(left) / right) + 1) * right + left;
             }
         }
+        public static int PowInPField(int elem, int deg, int dim)
+        {
+            elem = MathDivRemains(elem, dim);
+            if(deg % 2 == 0)
+            {
+                var temp = PowInPField(elem, deg/2, dim);
+                return MathDivRemains(temp * temp, dim);
+            }
+            else
+            {
+                return MathDivRemains(elem * PowInPField(elem, deg - 1, dim), dim);
+            }
+        }
         public static int ReverseElemInPFielp(int elem, int dimension)
         {
-            return MathDivRemains((int)Math.Pow(elem, dimension - 2), dimension);
+            return PowInPField(elem, dimension - 2, dimension);
         }
         
     }
@@ -35,7 +48,7 @@ namespace FiniteFields
         {
             deg = listOfCoeff.Length - 1;
             dim = dimension;
-            this.listOfCoeff = listOfCoeff;
+            listOfCoeff.CopyTo(this.listOfCoeff, 0);
             ToSimpleField();
             
         }
@@ -48,18 +61,12 @@ namespace FiniteFields
         }
         private PolinomOverSimpleField CutExtraZeros() 
         {
-            PolinomOverSimpleField tempPol = this;
             int realDeg = this.deg;
-            while (tempPol[realDeg] == 0 & realDeg > 0)
+            while (this[realDeg] == 0 & realDeg > 0)
             {
                 realDeg--;
             }
-            int[] listOfCoeff = new int[realDeg + 1];
-            for (int i = 0; i <= realDeg; i++)
-            {
-                listOfCoeff[i] = tempPol[i];
-            }
-            return new PolinomOverSimpleField(listOfCoeff, this.dim);
+            return new PolinomOverSimpleField(this.listOfCoeff.Take(realDeg + 1).ToArray(), this.dim);
         }
         public  int this[int key]
         {
@@ -84,7 +91,7 @@ namespace FiniteFields
             int[] listOfResCoeff = new int[pol.deg + 1];
             for (int i = 0; i <= pol.deg; i++)
             {
-                listOfResCoeff[i] = MyMath.MathDivRemains(-pol[i], pol.dim);
+                listOfResCoeff[i] = pol.dim - pol[i];
             }
             return new PolinomOverSimpleField(listOfResCoeff, pol.dim);
 
@@ -156,13 +163,7 @@ namespace FiniteFields
         }
         public override string ToString()
         {
-            string res = "";
-            foreach(var coeff in this.listOfCoeff)
-            {
-                res += (coeff.ToString() + ", ");
-            }
-            res = res.Substring(0, res.Length - 2);
-            return res;
+            return string.Join(", ", listOfCoeff);
         }
         public override bool Equals(object? obj)
         {

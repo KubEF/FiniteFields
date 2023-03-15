@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FiniteFields
 {
-    internal class BinaryFiniteField : FiniteField
+    public class BinaryFiniteField : FiniteField
     {
         public BinaryFiniteField(int n, PolinomOverSimpleField q) : base(2, n, q) { }
 

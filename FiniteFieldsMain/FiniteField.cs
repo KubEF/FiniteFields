@@ -23,7 +23,7 @@ namespace FiniteFields
             {
                 this.n = n;
                 this.p = p;
-                this.q = q;
+                this.q = new PolinomOverSimpleField(q.listOfCoeff, q.dim);
             }
             else
             {
@@ -119,7 +119,7 @@ namespace FiniteFields
                 }
             }
         }
-        public FiniteFieldElement GetReverse()
+         public FiniteFieldElement GetReverse()
         {
             return Pow((int)Math.Pow(F.p, F.n) - 2);
         }
