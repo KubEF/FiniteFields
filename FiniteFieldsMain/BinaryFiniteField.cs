@@ -14,10 +14,11 @@ namespace FiniteFields
         public FiniteFieldElement FromNumberToElement(int number)
         {
             if (number > (int)Math.Pow(2, n)) throw new Exception("Попытка оперировать числами большей размерности");
+            if (number == 0) return this.GetZero();
             int counter = 0;
             var temp = number;
             int[] polinomOfEl = new int[n];
-            while(temp > 1)
+            while(temp >= 1)
             {
                 polinomOfEl[counter] = temp % 2;
                 temp = temp / 2;
