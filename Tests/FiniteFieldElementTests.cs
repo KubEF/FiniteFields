@@ -88,8 +88,9 @@ namespace Tests
             FiniteFieldElement element1 = new(field, new int[] { 1, 0, 1, 0, 1, 1, 1, 1 });
             FiniteFieldElement element2 = new(field, new int[] { 1, 1, 1 });
             var expect = new FiniteFieldElement(field, new int[] { 1, 0, 1, 1, 1, 1, 1, 1 });
+            var actual = element1 * element2;
 
-            Assert.That(expect, Is.EqualTo(element1 * element2 ));
+            Assert.That(expect, Is.EqualTo(actual));
 
         }
         [Test]

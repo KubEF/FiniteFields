@@ -89,7 +89,8 @@ namespace FiniteFields
         public static FiniteFieldElement operator *(FiniteFieldElement a, FiniteFieldElement b)
         {
             if (!a.F.Equals(b.F)) throw new Exception("Попытка умножить числа из разных полей");
-            PolinomOverSimpleField resultRepresentedPol = (a.RepresentedPol * b.RepresentedPol) % a.F.q;
+            var multRes = a.RepresentedPol * b.RepresentedPol;
+            PolinomOverSimpleField resultRepresentedPol = multRes % a.F.q;
             return new FiniteFieldElement(a.F, resultRepresentedPol);
         }
         public static FiniteFieldElement operator /(FiniteFieldElement a, FiniteFieldElement b) => a * b.GetReverse();

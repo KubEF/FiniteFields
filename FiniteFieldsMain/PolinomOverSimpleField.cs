@@ -23,6 +23,8 @@ namespace FiniteFields
         public static int PowInPField(int elem, int deg, int dim)
         {
             elem = MathDivRemains(elem, dim);
+            if(deg == 1) { return elem; }
+            if(deg == 0) { return 1; }
             if(deg % 2 == 0)
             {
                 var temp = PowInPField(elem, deg/2, dim);
@@ -32,6 +34,7 @@ namespace FiniteFields
             {
                 return MathDivRemains(elem * PowInPField(elem, deg - 1, dim), dim);
             }
+
         }
         public static int ReverseElemInPFielp(int elem, int dimension)
         {
@@ -48,9 +51,9 @@ namespace FiniteFields
         {
             deg = listOfCoeff.Length - 1;
             dim = dimension;
+            this.listOfCoeff = new int[deg + 1];
             listOfCoeff.CopyTo(this.listOfCoeff, 0);
             ToSimpleField();
-            
         }
         private void ToSimpleField()
         {
@@ -59,7 +62,7 @@ namespace FiniteFields
                 listOfCoeff[i] = MyMath.MathDivRemains(listOfCoeff[i], dim);
             }
         }
-        private PolinomOverSimpleField CutExtraZeros() 
+        private PolinomOverSimpleField CutExtraZeroes() 
         {
             int realDeg = this.deg;
             while (this[realDeg] == 0 & realDeg > 0)
@@ -107,7 +110,7 @@ namespace FiniteFields
                 {
                     listOfResCoeff[i] = pol1[i] + pol2[i];
                 }
-                return (new PolinomOverSimpleField(listOfResCoeff, pol1.dim)).CutExtraZeros();
+                return (new PolinomOverSimpleField(listOfResCoeff, pol1.dim)).CutExtraZeroes();
             }
             else
             {
@@ -144,7 +147,7 @@ namespace FiniteFields
             {
                 int deg = Math.Min(pol1.deg, pol2.deg - 1);
                 int[] listOfResCoeff = new int[deg + 1];
-                PolinomOverSimpleField tempPol = pol1;
+                var tempPol = new PolinomOverSimpleField(pol1.listOfCoeff, pol1.dim); 
                 while(tempPol.deg > deg)
                 {
                     int[] majorSummand = new int[tempPol.deg - pol2.deg + 1];
